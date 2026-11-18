@@ -71,12 +71,12 @@ For a guided tour, complete the four first-run steps. Then register a repository
 For repositories to which you already have authorized read access, GitHub CLI can export Dependabot alerts. The command below **fetches** data; it does not change your GitHub repository.
 
 ```bash
-gh api --paginate repos/OWNER/REPO/dependabot/alerts > dependabot-alerts.json
+gh api --paginate --jq ".[]" repos/OWNER/REPO/dependabot/alerts | jq -s "." > dependabot-alerts.json
 ```
 
-For multiple API pages, use an array-producing JSON export workflow. Didban accepts a **JSON array of Dependabot alert objects** or `{ "alerts": [...] }`. Use the **Import Dependabot JSON** action, choose the destination repository, inspect the preview, and confirm. Duplicate numbers in the same repository are skipped; unsupported ecosystems are not silently translated into npm.
+The example above requires `jq` and produces one valid array even when GitHub returns multiple pages. Didban accepts a **JSON array of Dependabot alert objects** or `{ "alerts": [...] }`. Use the **Import Dependabot JSON** action, choose the destination repository, inspect the preview, and confirm. Duplicate numbers in the same repository are skipped; unsupported ecosystems are not silently translated into npm.
 
-**Note:** Depending on your `gh` version and pagination behavior, the output may need to be flattened into one JSON array. Do not paste tokens into Didban. GitHub access is entirely handled by your existing CLI authentication outside this app.
+**Note:** Do not paste tokens into Didban. GitHub access is entirely handled by your existing CLI authentication outside this app.
 
 ## How priority and readiness work
 
